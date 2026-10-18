@@ -638,7 +638,8 @@ static class StaticContent
                 growTime = config.TimberwoodGrowthTime,
                 growRadius = config.TimberwoodGrowRadius,
                 minScale = config.TimberwoodMinScale,
-                maxScale = config.TimberwoodMaxScale
+                maxScale = config.TimberwoodMaxScale,
+                tolerateCold = true
             }
         ];
     }
