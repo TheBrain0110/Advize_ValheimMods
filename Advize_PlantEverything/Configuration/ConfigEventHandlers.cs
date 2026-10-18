@@ -39,7 +39,7 @@ static class ConfigEventHandlers
 
     private static bool ShouldQueueMethod => !isDedicatedServer && !config.IsSourceOfTruth && !PerformingLocalConfigChange;
 
-    static void QueueReInitMethod(Action method)
+    private static void QueueReInitMethod(Action method)
     {
         if (!s_reInitQueueInProcess)
         {

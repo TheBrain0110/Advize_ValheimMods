@@ -634,82 +634,81 @@ static class StaticContent
             new SaplingDB
             {
                 key = "FirTree_big_Sapling",
-                biome = config.EnforceBiomesVanilla ? TemperateBiomes : AllBiomes,
+                biome = config.EnforceBiomesVanilla ? TemperateBiomes | Heightmap.Biome.Mountain: AllBiomes,
                 growTime = config.TimberwoodGrowthTime,
                 growRadius = config.TimberwoodGrowRadius,
                 minScale = config.TimberwoodMinScale,
                 maxScale = config.TimberwoodMaxScale
-            },
+            }
         ];
     }
 
     internal static List<PrefabDB> GenerateCropRefs()
     {
         bool overridesEnabled = config.EnableCropOverrides;
-        bool enforceBiomesVanilla = config.EnforceBiomesVanilla;
 
         return
         [
             new PrefabDB
             {
                 key = "sapling_barley",
-                biome = enforceBiomesVanilla ? Heightmap.Biome.Plains : AllBiomes,
+                biome = GetAllowedCropBiomes(Heightmap.Biome.Plains),
                 resourceCost = overridesEnabled ? config.BarleyCost : 1,
                 resourceReturn = overridesEnabled ? config.BarleyReturn : 2
             },
             new PrefabDB
             {
                 key = "sapling_carrot",
-                biome = enforceBiomesVanilla ? TemperateBiomes : AllBiomes,
+                biome = GetAllowedCropBiomes(),
                 resourceCost = overridesEnabled ? config.CarrotCost : 1,
                 resourceReturn = overridesEnabled ? config.CarrotReturn : 1
             },
             new PrefabDB
             {
                 key = "sapling_flax",
-                biome = enforceBiomesVanilla ? Heightmap.Biome.Plains : AllBiomes,
+                biome = GetAllowedCropBiomes(Heightmap.Biome.Plains),
                 resourceCost = overridesEnabled ? config.FlaxCost : 1,
                 resourceReturn = overridesEnabled ? config.FlaxReturn : 2
             },
             new PrefabDB
             {
                 key = "sapling_onion",
-                biome = enforceBiomesVanilla ? TemperateBiomes : AllBiomes,
+                biome = GetAllowedCropBiomes(),
                 resourceCost = overridesEnabled ? config.OnionCost : 1,
                 resourceReturn = overridesEnabled ? config.OnionReturn : 1
             },
             new PrefabDB
             {
                 key = "sapling_seedcarrot",
-                biome = enforceBiomesVanilla ? TemperateBiomes : AllBiomes,
+                biome = GetAllowedCropBiomes(),
                 resourceCost = overridesEnabled ? config.SeedCarrotCost : 1,
                 resourceReturn = overridesEnabled ? config.SeedCarrotReturn : 3
             },
             new PrefabDB
             {
                 key = "sapling_seedonion",
-                biome = enforceBiomesVanilla ? TemperateBiomes : AllBiomes,
+                biome = GetAllowedCropBiomes(),
                 resourceCost = overridesEnabled ? config.SeedOnionCost : 1,
                 resourceReturn = overridesEnabled ? config.SeedOnionReturn : 3
             },
             new PrefabDB
             {
                 key = "sapling_seedturnip",
-                biome = enforceBiomesVanilla ? TemperateBiomes | Heightmap.Biome.Swamp | Heightmap.Biome.Mistlands : AllBiomes,
+                biome = GetAllowedCropBiomes(HardyCropBiomes),
                 resourceCost = overridesEnabled ? config.SeedTurnipCost : 1,
                 resourceReturn = overridesEnabled ? config.SeedTurnipReturn : 3
             },
             new PrefabDB
             {
                 key = "sapling_turnip",
-                biome = enforceBiomesVanilla ? TemperateBiomes | Heightmap.Biome.Swamp | Heightmap.Biome.Mistlands : AllBiomes,
+                biome = GetAllowedCropBiomes(HardyCropBiomes),
                 resourceCost = overridesEnabled ? config.TurnipCost : 1,
                 resourceReturn = overridesEnabled ? config.TurnipReturn : 1
             },
             new PrefabDB
             {
                 key = "sapling_magecap",
-                biome = enforceBiomesVanilla ? Heightmap.Biome.Mistlands : AllBiomes,
+                biome = GetAllowedCropBiomes(Heightmap.Biome.Mistlands),
                 resourceCost = overridesEnabled ? config.MagecapCost : 1,
                 resourceReturn = overridesEnabled ? config.MagecapReturn : 1,
                 extraDrops = true
@@ -717,7 +716,7 @@ static class StaticContent
             new PrefabDB
             {
                 key = "sapling_jotunpuffs",
-                biome = enforceBiomesVanilla ? Heightmap.Biome.Mistlands : AllBiomes,
+                biome = GetAllowedCropBiomes(Heightmap.Biome.Mistlands),
                 resourceCost = overridesEnabled ? config.JotunPuffsCost : 1,
                 resourceReturn = overridesEnabled ? config.JotunPuffsReturn : 1,
                 extraDrops = true
@@ -725,33 +724,35 @@ static class StaticContent
             new PrefabDB
             {
                 key = "sapling_oat",
-                biome = enforceBiomesVanilla ? TemperateBiomes : AllBiomes,
+                biome = GetAllowedCropBiomes(),
                 resourceCost = overridesEnabled ? config.OatCost : 1,
                 resourceReturn = overridesEnabled ? config.OatReturn : 3
             },
             new PrefabDB
             {
                 key = "sapling_poteitr",
-                biome = enforceBiomesVanilla ? TemperateBiomes : AllBiomes,
+                biome = GetAllowedCropBiomes(),
                 resourceCost = overridesEnabled ? config.PoteitrCost : 1,
                 resourceReturn = overridesEnabled ? config.PoteitrReturn : 3
             },
             new PrefabDB
             {
                 key = "sapling_Kale",
-                biome = enforceBiomesVanilla ? TemperateBiomes : AllBiomes,
+                biome = GetAllowedCropBiomes(),
                 resourceCost = overridesEnabled ? config.KaleCost : 1,
                 resourceReturn = overridesEnabled ? config.KaleReturn : 3
             },
             new PrefabDB
             {
                 key = "sapling_seedkale",
-                biome = enforceBiomesVanilla ? TemperateBiomes : AllBiomes,
+                biome = GetAllowedCropBiomes(),
                 resourceCost = overridesEnabled ? config.SeedKaleCost : 1,
                 resourceReturn = overridesEnabled ? config.SeedKaleReturn : 3
             }
         ];
     }
+
+    private static Heightmap.Biome GetAllowedCropBiomes(Heightmap.Biome vanillaBiomes = StandardCropBiomes) => config.EnforceBiomesVanilla ? vanillaBiomes : AllBiomes;
 
     internal static List<ModdedPlantDB> GenerateCustomPlantRefs(List<GameObject> customPlants)
     {

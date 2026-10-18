@@ -31,7 +31,9 @@ static class StaticMembers
     internal static readonly Dictionary<Texture2D, Sprite> cachedSprites = [];
 
     internal const Heightmap.Biome TemperateBiomes = Heightmap.Biome.Meadows | Heightmap.Biome.BlackForest | Heightmap.Biome.Plains;
-    internal static Heightmap.Biome AllBiomes = /*(Heightmap.Biome)895*/GetBiomeMask((Heightmap.Biome[])System.Enum.GetValues(typeof(Heightmap.Biome)));
+    internal const Heightmap.Biome StandardCropBiomes = Heightmap.Biome.Meadows | Heightmap.Biome.BlackForest | Heightmap.Biome.Plains | Heightmap.Biome.AshLands;
+    internal const Heightmap.Biome HardyCropBiomes = Heightmap.Biome.Land & ~(Heightmap.Biome.Mountain | Heightmap.Biome.DeepNorth);
+    internal static Heightmap.Biome AllBiomes = GetBiomeMask((Heightmap.Biome[])System.Enum.GetValues(typeof(Heightmap.Biome)));
 
     internal static readonly int PlaceAnywhereHash = "pe_placeAnywhere".GetStableHashCode();   
 
