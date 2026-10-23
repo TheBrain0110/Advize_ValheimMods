@@ -58,7 +58,8 @@ interacted with, such as `Pickable_Stone`, `Pickable_Branch`, `RaspberryBush`, o
 These are what you **pay** to place the object, not what it drops. The dropped item comes from the
 referenced prefab's own pickup behaviour.
 
-> The build-menu **icon** is taken from `resourceName` (the cost item), not from the prefab.
+> The build-menu **icon** is taken from `resourceName` (the cost item), not from the prefab. A spawner is
+> the exception, its icon is the item it yields.
 
 ### `pieceName` / `pieceDescription` — display text
 
@@ -73,6 +74,8 @@ config (the build menu localises `$`-prefixed strings only, so a literal name is
 - The prefab's **own** behaviour is left alone. Its pickup, respawn timer, drop amount and visuals stay
   exactly as the game defines them. (The mod's own built-in plants — raspberry bushes, mushrooms and so
   on — are the exception: their respawn time and drop amount are configurable in the mod config.)
+- With **ResourcesSpawnEmpty** turned on, a prefab added through this file is placed empty and has to
+  regrow before it can be harvested, just like the plants the mod adds itself.
 
 ---
 
@@ -116,7 +119,7 @@ inherited:
 | Collider, physics, LOD, lights | inherited from the template prefab |
 
 The template is the prefab named by `prefabName`. It contributes the *structure* of the object (its
-collider, physics, LOD group and lights) and nothing else — you choose the item, the timings and both
+collider, physics, LOD group and lights) and nothing else — you choose the item, the drop amount and both
 meshes yourself.
 
 The mod never modifies the template prefab itself. The template is copied, and the copy is what gets
@@ -153,6 +156,23 @@ The two states are toggled by the same mechanism the mod uses for its own plants
 
 The empty state is always shown for a spawner that has an `emptyVisual`, even when
 `ShowPickableSpawners` is turned off — that setting only affects the plants the mod adds itself.
+
+### Spawning empty
+
+A spawner follows the **ResourcesSpawnEmpty** setting of the mod: with it turned on, a spawner that is
+placed starts out empty and has to regrow before it can be harvested, just like the plants the mod adds
+itself.
+
+A spawner that cannot regrow — one with no `respawnTime` and a template without a respawn timer — is
+always placed full, because an empty spawner would never come back.
+
+### The respawn timer
+
+`respawnTime` is the number of **minutes** between two harvests. `0` means the timer of the template is
+used.
+
+The timer behaves like the timer of the game's own pickables, so a spawner comes back the same way a
+vanilla mushroom or a berry bush does.
 
 ### Worked example — a Resin node
 
@@ -208,6 +228,9 @@ config and the spawner names match on both sides.
 
 The **server's** copy of the file is authoritative. A client's local file is only read if the client is
 the host.
+
+A client builds the spawners when the config reaches it, which is after the world has been loaded. The
+spawners that were placed in the world show up as soon as the config arrives.
 
 Spawners that were already placed keep working after the file changes, as long as `spawnerName` is
 unchanged.

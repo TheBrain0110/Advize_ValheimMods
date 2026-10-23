@@ -21,13 +21,12 @@ using static StaticMembers;
 internal static class SpawnerFactory
 {
     // the name ShowPickableSpawnerPatches looks for when toggling the empty visual
-    internal const string PickedChildName = "PE_Picked";
+    private const string PickedChildName = "PE_Picked";
 
     private const string PickedSuffix = "_Picked";
 
     private static readonly Dictionary<string, GameObject> spawners = [];
     private static readonly Dictionary<string, string> signatures = [];
-    private static readonly Dictionary<int, GameObject> spawnersByHash = [];
     private static GameObject holder;
 
     /// <summary>
@@ -36,8 +35,6 @@ internal static class SpawnerFactory
     /// world save.
     /// </summary>
     internal static bool IsValidName(string name) => !string.IsNullOrWhiteSpace(name) && !name.Contains(' ') && !name.Contains('(');
-
-    internal static GameObject GetByHash(int hash) => spawnersByHash.TryGetValue(hash, out GameObject prefab) ? prefab : null;
 
     /// <summary>
     /// Creates the spawner described by <paramref name="er"/> if it does not
@@ -89,7 +86,6 @@ internal static class SpawnerFactory
 
             if (prefab)
             {
-                spawnersByHash.Remove(prefab.name.GetStableHashCode());
                 Unregister(prefab, instance);
 
                 if (prefabRefs.TryGetValue(name, out GameObject current) && current == prefab)
@@ -206,10 +202,9 @@ internal static class SpawnerFactory
         Pickable pickable = clone.GetComponent<Pickable>();
 
         pickable.m_itemPrefab = dropPrefab;
-        // the clone shares the drop table instance of the template, give it its own
+        // a spawner yields what it is configured to yield, nothing else
         pickable.m_extraDrops = new DropTable();
-        pickable.m_pickRaiseSkill = Skills.SkillType.None;
-        pickable.m_aggravateRange = 0f;
+        // the hover text names the item the spawner yields
         pickable.m_overrideName = "";
 
         if (er.amount > 0)
@@ -220,8 +215,6 @@ internal static class SpawnerFactory
         if (er.respawnTime > 0f)
         {
             pickable.m_respawnTimeMinutes = er.respawnTime;
-            pickable.m_respawnTimeInitMin = 0f;
-            pickable.m_respawnTimeInitMax = 0f;
         }
 
         if (pickable.m_respawnTimeMinutes <= 0f)
@@ -439,20 +432,15 @@ internal static class SpawnerFactory
 
     /// <summary>
     /// Copies the template without running any of its Awake methods, so that
-    /// the copy does not create a ZDO of its own.
+    /// the copy does not create a ZDO of its own. The copy is parented to an
+    /// inactive object, which is what keeps it from waking up. The template
+    /// itself is never touched, it can be a prefab the whole game shares.
     /// </summary>
     private static GameObject Clone(GameObject template, string name)
     {
-        bool wasActive = template.activeSelf;
-
-        if (wasActive) template.SetActive(false);
-
         GameObject clone = UnityEngine.Object.Instantiate(template, Holder().transform);
 
-        if (wasActive) template.SetActive(wasActive);
-
         clone.name = name;
-        // the holder is inactive, so the clone never becomes active in the hierarchy
         clone.SetActive(true);
 
         return clone;
@@ -499,14 +487,12 @@ internal static class SpawnerFactory
     {
         if (spawners.TryGetValue(name, out GameObject previous) && previous)
         {
-            spawnersByHash.Remove(previous.name.GetStableHashCode());
             Unregister(previous, instance);
 
             UnityEngine.Object.Destroy(previous);
         }
 
         spawners[name] = prefab;
-        spawnersByHash[prefab.name.GetStableHashCode()] = prefab;
     }
 
     private static string BuildSignature(ExtraResource er) => $"{er.prefabName}|{er.dropItem}|{er.respawnTime}|{er.amount}|{er.fullVisual}|{er.emptyVisual}";

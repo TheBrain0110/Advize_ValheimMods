@@ -134,7 +134,6 @@
     <Compile Include="Patches\PlantPatches.cs" />
     <Compile Include="Patches\ServerSyncPatches.cs" />
     <Compile Include="Patches\ShowPickableSpawnerPatches.cs" />
-    <Compile Include="Patches\SpawnerGetPrefabPatch.cs" />
     <Compile Include="Patches\CheckZDOPatches.cs" />
     <Compile Include="PlantEverything.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

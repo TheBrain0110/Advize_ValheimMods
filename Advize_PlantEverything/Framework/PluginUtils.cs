@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using BepInEx;
@@ -35,6 +36,13 @@ static class PluginUtils
     internal static bool IsModdedPrefab(Component c) => c && prefabRefs.ContainsKey(GetPrefabName(c));
 
     internal static bool IsModdedPrefabOrSapling(string s) => s.StartsWith("$pe") || s.EndsWith("_sapling");
+
+    /// <summary>
+    /// Prefabs added through ExtraResources.json, either a spawner the mod
+    /// created or a prefab the user pointed at. They follow the same rules as
+    /// the plants of the mod.
+    /// </summary>
+    internal static bool IsExtraResourcePrefab(string prefabName) => pieceRefs.Any(pdb => pdb.extraResource && pdb.key == prefabName);
 
     internal static bool HoldingCultivator => Player.m_localPlayer?.GetRightItem()?.m_shared.m_name == "$item_cultivator";
 

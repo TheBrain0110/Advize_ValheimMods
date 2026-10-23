@@ -523,7 +523,7 @@ static class StaticContent
                     isSpawner = er.IsSpawner,
                     templateName = er.prefabName,
                     dropItem = er.IsSpawner ? er.dropItem : null,
-                    pieceName = er.pieceName == "" ? pieceKey : er.pieceName,
+                    pieceName = string.IsNullOrEmpty(er.pieceName) ? pieceKey : er.pieceName,
                     pieceDescription = er.pieceDescription
                 });
 
