@@ -77,6 +77,16 @@ internal static class ModUtils
         return extraInteractables;
     }
 
+    internal static string GetReplantPrefabKey(Pickable pickable)
+    {
+        string harvestedCrop = Utils.GetPrefabName(pickable.gameObject);
+
+        if (config.ReplantStyle == ReplantStyle.HarvestedCrop)
+            return harvestedCrop;
+
+        return PlacementState.LastSelectedPlantName ?? harvestedCrop;
+    }
+
     private static readonly int PlantCollisionMask = LayerMask.GetMask("Default", "static_solid", "Default_small", "piece", "piece_nonsolid");
 
     private static float PickableSnapRadius(Piece p) => p?.m_harvestRadius > 0 ? p.m_harvestRadius : config.DefaultGridSpacing;

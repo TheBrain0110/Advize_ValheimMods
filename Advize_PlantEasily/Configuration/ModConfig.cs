@@ -57,6 +57,7 @@ sealed class ModConfig
     private readonly ConfigEntry<HarvestStyle> harvestStyle;
     private readonly ConfigEntry<float> harvestRadius;
     private readonly ConfigEntry<bool> replantOnHarvest;
+    private readonly ConfigEntry<ReplantStyle> replantStyle;
 
     //Performance
     private readonly ConfigEntry<int> maxConcurrentPlacements;
@@ -158,6 +159,7 @@ sealed class ModConfig
         harvestStyle = Config.BindInOrder("Harvesting", "HarvestStyle", HarvestStyle.AllResources, "Determines bulk harvest style. LikeResources only harvests resources of the type you've interacted with. AllResources harvests all eligible resources.");
         harvestRadius = Config.BindInOrder("Harvesting", "HarvestRadius", 3.0f, "Determines radius used to search for resources when bulk harvesting.");
         replantOnHarvest = Config.BindInOrder("Harvesting", "ReplantOnHarvest", false, "Enables automatic replanting of crops when harvested, provided you have the resources.");
+        replantStyle = Config.BindInOrder("Harvesting", "ReplantStyle", ReplantStyle.HarvestedCrop, "Determines which crop is automatically replanted after harvesting. HarvestedCrop always replants the harvested crop. SelectedCrop replants the last valid crop selected in the cultivator build menu, or the harvested crop if no selection exists.");
 
         //Performance
         maxConcurrentPlacements = Config.BindInOrder("Performance", "MaxConcurrentPlacements", 500, "Maximum amount of pieces that can be placed at once with the cultivator.", acceptableValues: new AcceptableValueRange<int>(2, 10000));
@@ -307,6 +309,7 @@ sealed class ModConfig
         get { return replantOnHarvest.Value; }
         set { replantOnHarvest.BoxedValue = value; }
     }
+    internal ReplantStyle ReplantStyle => replantStyle.Value;
     //Performance
     internal int MaxConcurrentPlacements => maxConcurrentPlacements.Value;
     internal int GhostUpdateBatchSize => ghostUpdateBatchSize.Value;

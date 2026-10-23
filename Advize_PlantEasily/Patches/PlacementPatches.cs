@@ -29,8 +29,14 @@ static class PlacementPatches
 
             GhostGrid.PrepareGhostPool(__instance.m_placementGhost);
 
-            if (!config.ModActive || !__instance.m_placementGhost || !HoldingCultivator || !IsPlantOrPickable(__instance.m_placementGhost))
+            if (!config.ModActive || !__instance.m_placementGhost || !HoldingCultivator)
                 return;
+
+            PlacementState.LastSelectedPlantName = null;
+
+            if (!IsPlantOrPickable(__instance.m_placementGhost))
+                return;
+
             //Dbgl("SetupPlacementGhost2");
             __instance.m_placeRotation = placementRotation;
 

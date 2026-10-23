@@ -2,6 +2,7 @@
 
 using HarmonyLib;
 using static ModContext;
+using static ModUtils;
 
 [HarmonyPatch]
 static class HoverTextPatches
@@ -39,14 +40,8 @@ static class HoverTextPatches
 
         string suffix = BuildAreaHint("$inventory_pickup");
 
-        if (config.ReplantOnHarvest && config.ShowHoverReplantHint && ReplantDB.Registry.TryGetValue(Utils.GetPrefabName(__instance.gameObject), out _))
-        {
-            string hoverName = string.IsNullOrEmpty(PlacementState.LastSelectedPlantName)
-                ? __instance.GetHoverName()
-                : ReplantDB.Registry[PlacementState.LastSelectedPlantName].Pickable.GetHoverName();
-
-            suffix += $"\nReplant as: <color=green>{hoverName}</color>";
-        }
+        if (config.ReplantOnHarvest && config.ShowHoverReplantHint && ReplantDB.Registry.TryGetValue(GetReplantPrefabKey(__instance), out ReplantDB replantEntry))
+            suffix += $"\nReplant as: <color=green>{replantEntry.Pickable.GetHoverName()}</color>";
 
         __result += Localization.instance.Localize(suffix);
     }

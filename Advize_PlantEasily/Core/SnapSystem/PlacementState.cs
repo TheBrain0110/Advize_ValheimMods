@@ -17,7 +17,7 @@ internal static class PlacementState
     internal static GameObject PlacementGhost;
     internal static Piece Piece;
     internal static Plant Plant;
-    internal static string LastSelectedPlantName = ""; // only used for replant on harvest
+    internal static string LastSelectedPlantName; // only used for replant on harvest
 
     internal static Vector3 SnapDirection;
 
@@ -30,8 +30,6 @@ internal static class PlacementState
         PlacementGhost = rootGhost;
         Plant = rootGhost.GetComponent<Plant>();
         Piece = rootGhost.GetComponent<Piece>();
-
-        LastSelectedPlantName = null;
 
         if (!Plant)
             return;

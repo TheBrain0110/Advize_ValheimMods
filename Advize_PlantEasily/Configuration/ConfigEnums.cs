@@ -2,5 +2,6 @@
 
 internal enum GridSnappingStyle { Intelligent, Legacy }
 internal enum HarvestStyle { LikeResources, AllResources }
+internal enum ReplantStyle { HarvestedCrop, SelectedCrop }
 internal enum CostDisplayStyle { TotalCount, FullCost }
 internal enum CostDisplayLocation { LeftSide, RightSide }

@@ -51,13 +51,10 @@ static class InteractPatches
     [HarmonyPatch(typeof(Pickable), nameof(Pickable.SetPicked))]
     static void Prefix(Pickable __instance, bool picked)
     {
-        if (!config.ModActive || !config.ReplantOnHarvest || _instanceIDS.Count == 0 || !picked) return;
-
-        int instanceID = __instance.GetInstanceID();
-        if (!_instanceIDS.Remove(instanceID))
+        if (!config.ModActive || !config.ReplantOnHarvest || _instanceIDS.Count == 0 || !picked || !_instanceIDS.Remove(__instance.GetInstanceID()))
             return;
 
-        string plantPrefabKey = string.IsNullOrEmpty(PlacementState.LastSelectedPlantName) ? Utils.GetPrefabName(__instance.gameObject) : PlacementState.LastSelectedPlantName;
+        string plantPrefabKey = GetReplantPrefabKey(__instance);
 
         if (!ReplantDB.Registry.TryGetValue(plantPrefabKey, out ReplantDB replantEntry))
             return;
@@ -68,7 +65,8 @@ static class InteractPatches
         Player player = Player.m_localPlayer;
         Piece piece = prefab.GetComponent<Piece>();
 
-        if (!player.HaveRequirements(piece, Player.RequirementMode.CanBuild) && !player.m_noPlacementCost) return;
+        if (!player.HaveRequirements(piece, Player.RequirementMode.CanBuild) && !player.m_noPlacementCost)
+            return;
 
         PlacementController.PlacePiece(player, __instance.gameObject, piece.gameObject);
         player.ConsumeResources(piece.m_resources, 0);
